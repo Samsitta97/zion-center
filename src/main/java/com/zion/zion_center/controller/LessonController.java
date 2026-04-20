@@ -25,6 +25,11 @@ public class LessonController {
         return ResponseEntity.ok(lessonService.getByClassId(classId, email));
     }
 
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<List<LessonResponse>> getByCategory(@PathVariable Long categoryId) {
+        return ResponseEntity.ok(lessonService.getByCategoryId(categoryId));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<LessonResponse> getById(@PathVariable Long id,
                                                    @AuthenticationPrincipal String email) {

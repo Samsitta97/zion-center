@@ -8,7 +8,6 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ClassMapper {
 
-    @Mapping(target = "categoryName", source = "category.name")
     @Mapping(target = "status", expression = "java(aClass.getStatus().name())")
     ClassResponse toResponse(Class aClass);
 }

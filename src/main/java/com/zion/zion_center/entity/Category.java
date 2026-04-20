@@ -9,6 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 import java.util.List;
 
+
 @Entity
 @Table(name = "categories")
 @EntityListeners(AuditingEntityListener.class)
@@ -38,5 +39,5 @@ public class Category {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "category")
-    private List<Class> classes;
+    private List<Lesson> lessons;
 }

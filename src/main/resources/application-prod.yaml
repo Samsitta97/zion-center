@@ -1,0 +1,68 @@
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: ${DB_POOL_MAX_SIZE:20}
+      minimum-idle: ${DB_POOL_MIN_IDLE:5}
+      connection-timeout: ${DB_POOL_CONNECTION_TIMEOUT:30000}
+      idle-timeout: ${DB_POOL_IDLE_TIMEOUT:600000}
+      max-lifetime: ${DB_POOL_MAX_LIFETIME:1800000}
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiration-ms: ${JWT_EXPIRATION_MS:900000}          # 15 minutes
+  refresh-expiration-ms: ${JWT_REFRESH_EXPIRATION_MS:604800000}  # 7 days
+
+server:
+  port: ${SERVER_PORT:8080}
+  shutdown: graceful
+  forward-headers-strategy: NATIVE
+
+spring.lifecycle.timeout-per-shutdown-phase: ${SHUTDOWN_TIMEOUT:30s}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
+  server:
+    port: ${MANAGEMENT_PORT:8081}
+
+app:
+  base-url: ${APP_BASE_URL}
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS}
+  rate-limit:
+    login-capacity: ${RATE_LIMIT_LOGIN_CAPACITY:5}
+    login-refill-seconds: ${RATE_LIMIT_LOGIN_REFILL_SECONDS:60}
+
+logging:
+  file:
+    name: ${LOG_FILE:/var/log/zion-center/app.log}
+  logback:
+    rollingpolicy:
+      file-name-pattern: ${LOG_FILE:/var/log/zion-center/app}.%d{yyyy-MM-dd}.%i.log.gz
+      max-file-size: 10MB
+      max-history: 30
+      total-size-cap: 500MB
+  level:
+    root: INFO
+    com.zion.zion_center: INFO
+    com.zion.zion_center.security: WARN
+    org.springframework.security: WARN
+    org.hibernate: WARN
+    org.springframework.web: WARN
+    org.springframework.boot: WARN
+    org.flywaydb: INFO

@@ -1,9 +1,9 @@
 package com.zion.zion_center.dto.user;
 
+import com.zion.zion_center.validation.ValidPassword;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 
 public record ChangePasswordRequest(
         @NotBlank String oldPassword,
-        @NotBlank @Size(min = 6) String newPassword
+        @NotBlank @ValidPassword String newPassword
 ) {}

@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,24 +35,35 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
 
         String token = authHeader.substring(7);
-        try {
-            if (jwtUtil.isTokenValid(token)) {
-                String email = jwtUtil.extractEmail(token);
-                String role  = jwtUtil.extractClaims(token).get("role", String.class);
-                log.debug("JWT valid — email={}, role={}", email, role);
 
-                var auth = new UsernamePasswordAuthenticationToken(
-                        email, null,
-                        List.of(new SimpleGrantedAuthority("ROLE_" + role))
-                );
-                SecurityContextHolder.getContext().setAuthentication(auth);
-            } else {
-                log.warn("JWT token is invalid or expired");
+        try {
+            if (!jwtUtil.isTokenValid(token)) {
+                sendUnauthorized(response, "Access token is invalid or expired");
+                return;
             }
+
+            String email = jwtUtil.extractEmail(token);
+            String role  = jwtUtil.extractClaims(token).get("role", String.class);
+            log.debug("JWT valid — email={}, role={}", email, role);
+
+            var auth = new UsernamePasswordAuthenticationToken(
+                    email, null,
+                    List.of(new SimpleGrantedAuthority("ROLE_" + role))
+            );
+            SecurityContextHolder.getContext().setAuthentication(auth);
+
         } catch (Exception e) {
             log.error("JWT processing failed: {}", e.getMessage());
+            sendUnauthorized(response, "Access token processing failed");
+            return;
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    private void sendUnauthorized(HttpServletResponse response, String message) throws IOException {
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json");
+        response.getWriter().write("{\"error\":\"" + message + "\"}");
     }
 }

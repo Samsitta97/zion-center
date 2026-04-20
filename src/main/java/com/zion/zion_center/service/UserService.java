@@ -35,6 +35,13 @@ public class UserService {
         return userMapper.toResponse(findById(id));
     }
 
+    public UserResponse getMe(String email) {
+        return userMapper.toResponse(
+                userRepository.findByEmail(email)
+                        .orElseThrow(() -> new ResourceNotFoundException("User not found"))
+        );
+    }
+
     public UserResponse create(UserRequest request) {
         if (userRepository.existsByEmail(request.email())) {
             throw new BadRequestException("Email is already in use");

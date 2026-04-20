@@ -2,12 +2,14 @@ package com.zion.zion_center.service;
 
 import com.zion.zion_center.dto.lesson.LessonRequest;
 import com.zion.zion_center.dto.lesson.LessonResponse;
+import com.zion.zion_center.entity.Category;
 import com.zion.zion_center.entity.Class;
 import com.zion.zion_center.entity.Lesson;
 import com.zion.zion_center.entity.User;
 import com.zion.zion_center.exception.AccessDeniedException;
 import com.zion.zion_center.exception.ResourceNotFoundException;
 import com.zion.zion_center.mapper.LessonMapper;
+import com.zion.zion_center.repository.CategoryRepository;
 import com.zion.zion_center.repository.ClassRepository;
 import com.zion.zion_center.repository.LessonRepository;
 import com.zion.zion_center.repository.UserRepository;
@@ -27,6 +29,7 @@ public class LessonService {
 
     private final LessonRepository lessonRepository;
     private final ClassRepository classRepository;
+    private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
     private final LessonMapper lessonMapper;
 
@@ -38,6 +41,15 @@ public class LessonService {
             }
         }
         return lessonRepository.findByAClassId(classId).stream()
+                .map(lessonMapper::toResponse)
+                .toList();
+    }
+
+    public List<LessonResponse> getByCategoryId(Long categoryId) {
+        if (!categoryRepository.existsById(categoryId)) {
+            throw new ResourceNotFoundException("Category not found: " + categoryId);
+        }
+        return lessonRepository.findByCategoryId(categoryId).stream()
                 .map(lessonMapper::toResponse)
                 .toList();
     }
@@ -59,8 +71,11 @@ public class LessonService {
             verifyClassOwnership(aClass.getId(), user);
         }
 
+        Category category = resolveCategory(request.categoryId());
+
         Lesson lesson = Lesson.builder()
                 .aClass(aClass)
+                .category(category)
                 .title(request.title())
                 .description(request.description())
                 .youtubeUrl(request.youtubeUrl())
@@ -88,6 +103,7 @@ public class LessonService {
             lesson.setAClass(aClass);
         }
 
+        lesson.setCategory(resolveCategory(request.categoryId()));
         lesson.setTitle(request.title());
         lesson.setDescription(request.description());
         lesson.setYoutubeUrl(request.youtubeUrl());
@@ -123,6 +139,11 @@ public class LessonService {
         if (!classRepository.existsByIdAndUserId(classId, user.getId())) {
             throw new AccessDeniedException("You do not have access to this lesson");
         }
+    }
+
+    private Category resolveCategory(Long categoryId) {
+        return categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found: " + categoryId));
     }
 
     private String extractYoutubeId(String url) {

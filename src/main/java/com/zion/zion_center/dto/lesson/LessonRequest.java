@@ -8,5 +8,6 @@ public record LessonRequest(
         @NotBlank String title,
         String description,
         @NotBlank String youtubeUrl,
-        Integer durationSeconds
+        Integer durationSeconds,
+        @NotNull Long categoryId
 ) {}

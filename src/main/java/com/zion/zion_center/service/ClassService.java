@@ -2,13 +2,11 @@ package com.zion.zion_center.service;
 
 import com.zion.zion_center.dto.classdto.ClassRequest;
 import com.zion.zion_center.dto.classdto.ClassResponse;
-import com.zion.zion_center.entity.Category;
 import com.zion.zion_center.entity.Class;
 import com.zion.zion_center.entity.User;
 import com.zion.zion_center.exception.AccessDeniedException;
 import com.zion.zion_center.exception.ResourceNotFoundException;
 import com.zion.zion_center.mapper.ClassMapper;
-import com.zion.zion_center.repository.CategoryRepository;
 import com.zion.zion_center.repository.ClassRepository;
 import com.zion.zion_center.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +20,6 @@ public class ClassService {
 
     private final ClassRepository classRepository;
     private final UserRepository userRepository;
-    private final CategoryRepository categoryRepository;
     private final ClassMapper classMapper;
 
     public List<ClassResponse> getAll(String email) {
@@ -45,15 +42,8 @@ public class ClassService {
     public ClassResponse create(ClassRequest request, String email) {
         User user = findUserByEmail(email);
 
-        Category category = null;
-        if (request.categoryId() != null) {
-            category = categoryRepository.findById(request.categoryId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Category not found: " + request.categoryId()));
-        }
-
         Class aClass = Class.builder()
                 .user(user)
-                .category(category)
                 .title(request.title())
                 .description(request.description())
                 .classDate(request.classDate())
@@ -68,12 +58,6 @@ public class ClassService {
         User user = findUserByEmail(email);
         if (isNotAdmin(user)) {
             verifyOwnership(aClass.getId(), user);
-        }
-
-        if (request.categoryId() != null) {
-            Category category = categoryRepository.findById(request.categoryId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Category not found: " + request.categoryId()));
-            aClass.setCategory(category);
         }
 
         aClass.setTitle(request.title());

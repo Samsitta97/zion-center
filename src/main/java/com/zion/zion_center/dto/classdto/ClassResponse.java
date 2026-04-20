@@ -7,7 +7,6 @@ public record ClassResponse(
         Long id,
         String title,
         String description,
-        String categoryName,
         LocalDate classDate,
         String status,
         LocalDateTime createdAt

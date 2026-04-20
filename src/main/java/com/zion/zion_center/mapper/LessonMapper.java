@@ -8,8 +8,10 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface LessonMapper {
 
-    @Mapping(target = "classId",    source = "AClass.id")
-    @Mapping(target = "classTitle", source = "AClass.title")
-    @Mapping(target = "isActive",   source = "active")
+    @Mapping(target = "classId",      source = "AClass.id")
+    @Mapping(target = "classTitle",   source = "AClass.title")
+    @Mapping(target = "categoryId",   source = "category.id")
+    @Mapping(target = "categoryName", source = "category.name")
+    @Mapping(target = "isActive",     source = "active")
     LessonResponse toResponse(Lesson lesson);
 }

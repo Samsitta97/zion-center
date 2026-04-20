@@ -6,6 +6,8 @@ public record LessonResponse(
         Long id,
         Long classId,
         String classTitle,
+        Long categoryId,
+        String categoryName,
         String title,
         String description,
         String youtubeUrl,
