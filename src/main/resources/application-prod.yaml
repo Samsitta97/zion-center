@@ -50,14 +50,6 @@ app:
     login-refill-seconds: ${RATE_LIMIT_LOGIN_REFILL_SECONDS:60}
 
 logging:
-  file:
-    name: ${LOG_FILE:/var/log/zion-center/app.log}
-  logback:
-    rollingpolicy:
-      file-name-pattern: ${LOG_FILE:/var/log/zion-center/app}.%d{yyyy-MM-dd}.%i.log.gz
-      max-file-size: 10MB
-      max-history: 30
-      total-size-cap: 500MB
   level:
     root: INFO
     com.zion.zion_center: INFO
