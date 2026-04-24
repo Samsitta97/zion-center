@@ -10,6 +10,7 @@ RUN mvn dependency:go-offline -q
 # Copy source and package
 COPY src ./src
 RUN mvn package -DskipTests -q
+# cache-bust: 2026-04-24
 
 # ── Stage 2: Run ────────────────────────────────────────────────────────────
 FROM eclipse-temurin:21-jre-jammy
