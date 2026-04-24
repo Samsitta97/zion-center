@@ -38,8 +38,6 @@ management:
   endpoint:
     health:
       show-details: never
-  server:
-    port: ${MANAGEMENT_PORT:8081}
 
 app:
   base-url: ${APP_BASE_URL}
