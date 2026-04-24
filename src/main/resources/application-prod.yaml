@@ -51,7 +51,7 @@ logging:
   level:
     root: INFO
     com.zion.zion_center: INFO
-    com.zion.zion_center.security: WARN
+    com.zion.zion_center.security: INFO
     org.springframework.security: WARN
     org.hibernate: WARN
     org.springframework.web: WARN
