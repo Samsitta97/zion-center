@@ -8,7 +8,7 @@ COPY pom.xml .
 RUN mvn dependency:go-offline -q
 
 # Copy source and package
-ARG CACHE_BUST=1
+ARG CACHE_BUST=2
 COPY src ./src
 RUN mvn package -DskipTests -q
 
