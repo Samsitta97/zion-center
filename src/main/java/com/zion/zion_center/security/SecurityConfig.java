@@ -67,9 +67,9 @@ public class SecurityConfig {
                 .collect(Collectors.toList());
         log.info("CORS allowed origins: {}", origins);
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOriginPatterns(origins);
+        config.setAllowedOrigins(origins);
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-        config.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With"));
+        config.setAllowedHeaders(List.of("*"));
         config.setExposedHeaders(List.of("Authorization", "X-RateLimit-Remaining"));
         config.setAllowCredentials(true);
         config.setMaxAge(3600L);
