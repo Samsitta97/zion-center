@@ -122,7 +122,7 @@ public class LessonService {
     }
 
     private Lesson findOrThrow(Long id) {
-        return lessonRepository.findById(id)
+        return lessonRepository.findByIdFetched(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Lesson not found: " + id));
     }
 

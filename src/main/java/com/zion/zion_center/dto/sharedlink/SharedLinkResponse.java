@@ -1,5 +1,7 @@
 package com.zion.zion_center.dto.sharedlink;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.LocalDateTime;
 
 public record SharedLinkResponse(
@@ -11,6 +13,6 @@ public record SharedLinkResponse(
         LocalDateTime expiresAt,
         Integer maxViews,
         int viewCount,
-        boolean isActive,
+        @JsonProperty("isActive") boolean isActive,
         LocalDateTime createdAt
 ) {}

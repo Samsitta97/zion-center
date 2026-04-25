@@ -1,5 +1,7 @@
 package com.zion.zion_center.dto.lesson;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.LocalDateTime;
 
 public record LessonResponse(
@@ -13,6 +15,6 @@ public record LessonResponse(
         String youtubeUrl,
         String youtubeVideoId,
         Integer durationSeconds,
-        boolean isActive,
+        @JsonProperty("isActive") boolean isActive,
         LocalDateTime createdAt
 ) {}
